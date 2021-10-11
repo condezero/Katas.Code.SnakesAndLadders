@@ -42,13 +42,5 @@ namespace SnakesAndLadders.Core.Test
 
         }
     }
-    [TestClass]
-    public class RollD6Test
-    {
-        [TestMethod]
-        public void MyTestMethod()
-        {
 
-        }
-    }
 }

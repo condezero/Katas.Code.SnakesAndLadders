@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 
 namespace SnakesAndLadders.Core
 {
+
     public class Game : IGame
     {
         public event EventHandler<GameEventArgs> OnTurnProcessed;
@@ -10,19 +12,37 @@ namespace SnakesAndLadders.Core
         private readonly IRuleManager _rules;
         private readonly IRollDice _rollDice;
 
-        public IPlayerPositionStorage _playerPositionStorage { get; }
+        private readonly IPlayerPositionStorage _playerPositionStorage;
 
+        private readonly IOptions<GameOptions> _options;
         private int _currentPlayer = 1;
         private int _old_currentPlayer = 1;
         private static int _numPlayers;
 
-        public Game(IRuleManager ruleManager, IRollDice rollDice, IPlayerPositionStorage playerPositionStorage, IAuditGame output)
+
+        /// <summary>
+        /// Create a new instance of Game.
+        /// </summary>
+        /// <param name="ruleManager">A <see cref="IRuleManager"/> instance.</param>
+        /// <param name="rollDice">A <see cref="IRollDice"/> instance.</param>
+        /// <param name="playerPositionStorage">A <see cref="IPlayerPositionStorage"/> instance.</param>
+        /// <param name="output">A <see cref="IAuditGame"/> instance.</param>
+        /// <param name="options">Game configuration <see cref="IOptions{GameOptions}"/></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="GameException"></exception>
+        public Game(IRuleManager ruleManager, IRollDice rollDice, IPlayerPositionStorage playerPositionStorage, IAuditGame output, IOptions<GameOptions> options)
         {
-            _rules = ruleManager;
-            _rollDice = rollDice;
-            _playerPositionStorage = playerPositionStorage;
+            _rules = ruleManager ?? throw new ArgumentNullException(nameof(ruleManager));
+            _rollDice = rollDice ?? throw new ArgumentNullException(nameof(rollDice));
+            _playerPositionStorage = playerPositionStorage ?? throw new ArgumentNullException(nameof(playerPositionStorage)); 
+            _options = options ?? throw new ArgumentNullException(nameof(options));
             output.Subscribe(this);
         }
+        /// <summary>
+        /// Game startup.
+        /// Initialize a game for X players.
+        /// </summary>
+        /// <param name="numPlayers">Number of players</param>
         public void InitGame(int numPlayers)
         {
             _numPlayers = numPlayers;
@@ -41,7 +61,7 @@ namespace SnakesAndLadders.Core
         /// <returns>A<see cref="Result"/>.</returns>
         public Result Roll()
         {
-            var result = _rollDice.Roll();
+            var result = _rollDice.Roll(_options.Value.DiceNumber);
 
             OnRollProcessed(this, new RollEventArgs(_currentPlayer, result));
 

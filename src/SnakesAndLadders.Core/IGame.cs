@@ -8,11 +8,11 @@ namespace SnakesAndLadders.Core
     public interface IGame
     {
         /// <summary>
-        /// Write game events
+        /// Write game events.
         /// </summary>
         event EventHandler<GameEventArgs> OnTurnProcessed;
         /// <summary>
-        /// Write roll events
+        /// Write roll events.
         /// </summary>
         event EventHandler<RollEventArgs> OnRollProcessed;
         /// <summary>

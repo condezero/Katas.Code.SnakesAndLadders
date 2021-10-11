@@ -11,8 +11,10 @@ namespace SnakesAndLadders.Core.Test
         public void GetRule_Not_Error()
         {
             // Arrange
-            var ruleList = new List<IRule>();
-            ruleList.Add(new FakeRule());
+            var ruleList = new List<IRule>
+            {
+                new FakeRule()
+            };
 
             var manager = new RuleManager(ruleList);
            
@@ -38,7 +40,7 @@ namespace SnakesAndLadders.Core.Test
 
             // Act
 
-            var rule = manager.GetRule(1, 1, 1);
+            _ = manager.GetRule(1, 1, 1);
 
             // Assert
 

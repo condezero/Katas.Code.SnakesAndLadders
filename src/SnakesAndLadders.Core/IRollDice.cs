@@ -5,10 +5,11 @@
     /// </summary>
     public interface IRollDice
     {
-        /// <summary>
-        /// Emulates a random dice.
-        /// </summary>
-        /// <returns></returns>
-        int Roll();
+  /// <summary>
+  /// Emulates roll dices.
+  /// </summary>
+  /// <param name="diceNumber">Number of dices.</param>
+  /// <returns></returns>
+        int Roll(int diceNumber);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
 
@@ -20,8 +21,8 @@ namespace SnakesAndLadders.Core.Test
             var rollDiceMock = new Mock<IRollDice>();
             var playerStorageMock = new PlayerPositionStorage();
             var auditmock = new Mock<IAuditGame>();
-
-            var game = new Game(ruleManagerMock.Object, rollDiceMock.Object, playerStorageMock, auditmock.Object);
+            var options = Options.Create(new GameOptions { DiceNumber = 1 });
+            var game = new Game(ruleManagerMock.Object, rollDiceMock.Object, playerStorageMock, auditmock.Object, options);
             // Act
 
             game.InitGame(players);
@@ -42,11 +43,11 @@ namespace SnakesAndLadders.Core.Test
             var ruleManagerMock = new Mock<IRuleManager>();
 
             var rollDiceMock = new Mock<IRollDice>();
-            rollDiceMock.Setup(s => s.Roll()).Returns(3);
+            rollDiceMock.Setup(s => s.Roll(It.IsAny<int>())).Returns(3);
             var playerStorageMock = new PlayerPositionStorage();
             var auditmock = new FakeOutputService();
-
-            var game = new Game(ruleManagerMock.Object, rollDiceMock.Object, playerStorageMock, auditmock);
+            var options = Options.Create(new GameOptions { DiceNumber = 1 });
+            var game = new Game(ruleManagerMock.Object, rollDiceMock.Object, playerStorageMock, auditmock, options);
             game.InitGame(2);
 
             // Act
@@ -66,11 +67,11 @@ namespace SnakesAndLadders.Core.Test
             ruleManagerMock.Setup(s => s.GetRule(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).Returns(new DefaultLimitMoventRule());
             var rollDiceMock = new Mock<IRollDice>();
 
-            rollDiceMock.Setup(s => s.Roll()).Returns(3);
+            rollDiceMock.Setup(s => s.Roll(It.IsAny<int>())).Returns(3);
             var playerStorageMock = new PlayerPositionStorage();
             var auditmock = new FakeOutputService();
-
-            var game = new Game(ruleManagerMock.Object, rollDiceMock.Object, playerStorageMock, auditmock);
+            var options = Options.Create(new GameOptions { DiceNumber = 1 });
+            var game = new Game(ruleManagerMock.Object, rollDiceMock.Object, playerStorageMock, auditmock, options);
             game.InitGame(2);
 
             // Act
@@ -101,11 +102,11 @@ namespace SnakesAndLadders.Core.Test
             ruleManagerMock.Setup(s => s.GetRule(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).Returns(new DefaultLimitMoventRule());
             var rollDiceMock = new Mock<IRollDice>();
 
-            rollDiceMock.Setup(s => s.Roll()).Returns(rollResult);
+            rollDiceMock.Setup(s => s.Roll(It.IsAny<int>())).Returns(rollResult);
             var playerStorageMock = new PlayerPositionStorage();
             var auditmock = new FakeOutputService();
-
-            var game = new Game(ruleManagerMock.Object, rollDiceMock.Object, playerStorageMock, auditmock);
+            var options = Options.Create(new GameOptions { DiceNumber = 1 });
+            var game = new Game(ruleManagerMock.Object, rollDiceMock.Object, playerStorageMock, auditmock, options);
             game.InitGame(2);
 
             // Act
